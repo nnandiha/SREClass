@@ -20,11 +20,9 @@ void NTAPI func(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 	SOCKET s = (SOCKET)context;
 
 	char recvbuf[DEFAULT_BUFLEN];
-	int recvbuflen = DEFAULT_BUFLEN;
-//	int iResult;
 
-	getData(s, recvbuf, DEFAULT_BUFLEN, 4);
-	sendData(s, recvbuf, DEFAULT_BUFLEN, 4);
+	getData(s, recvbuf, 4);
+	sendData(s, recvbuf, 4);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

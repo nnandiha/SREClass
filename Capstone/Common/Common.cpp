@@ -13,6 +13,7 @@
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <tchar.h>
 
 #include "sha1.h"
 
@@ -102,12 +103,27 @@ COMMON_API int startServer(_challengeInfo cInfo)
 			return 1;
 		}
 
+		TCHAR intro[512];
+		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+		if (iResult < 0){
+			printf("Error in _stprintf\n");
+			closesocket(ClientSocket);
+			continue;
+		}
+
+		iResult = sendData(ClientSocket, intro, iResult);
+		if (iResult < 0){
+			printf("Error sending intro\n");
+			closesocket(ClientSocket);
+			continue;
+		}
+
 		TP_WORK *work = CreateThreadpoolWork(cInfo.fCB, (PVOID)ClientSocket, NULL);
 		if (work == NULL)
 			printf("Error %d in CreateThreadpoolWork", GetLastError());
 		else {
 			SubmitThreadpoolWork(work);
-			WaitForThreadpoolWorkCallbacks(work, FALSE);
+			//WaitForThreadpoolWorkCallbacks(work, FALSE);
 			CloseThreadpoolWork(work);
 		}
 	}
@@ -118,22 +134,15 @@ COMMON_API int startServer(_challengeInfo cInfo)
 	return 0;
 }
 
-COMMON_API int sendData(SOCKET s, TCHAR *buf, int bufLen, int bytesToSend)
+COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend)
 {
-	if (buf == NULL || bufLen <= 0 || bytesToSend <= 0)
+	if (buf == NULL || bytesToSend <= 0)
 		return -1;
 
-	if (bytesToSend > bufLen)
-		return -1;
-
-	ZeroMemory(buf, bufLen);
-
-	// Echo the buffer back to the sender
 	int iSendResult = send(s, buf, bytesToSend, 0);
 	if (iSendResult == SOCKET_ERROR) {
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(s);
-		WSACleanup();
 		return -1;
 	}
 	printf("Bytes sent: %d\n", iSendResult);
@@ -141,38 +150,37 @@ COMMON_API int sendData(SOCKET s, TCHAR *buf, int bufLen, int bytesToSend)
 	return iSendResult;
 }
 
-COMMON_API int getData(SOCKET s, TCHAR *buf, int bufLen, int bytesToGet)
+COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet)
 {
-	if (buf == NULL || bufLen <= 0 || bytesToGet <= 0)
+	if (buf == NULL || bytesToGet <= 0)
 		return -1;
 	
-	if (bytesToGet > bufLen)
-		return -1;
-
-	ZeroMemory(buf, bufLen);
-
 	int iResult = recv(s, buf, bytesToGet, 0);
 	if (iResult > 0) {
 		printf("Bytes received: %d\n", iResult);
 	}
-	else if (iResult == 0)
+	else if (iResult == 0){
 		printf("Connection closing...\n");
 		// shutdown the connection since we're done
 		iResult = shutdown(s, SD_SEND);
 		if (iResult == SOCKET_ERROR) {
 			printf("shutdown failed with error: %d\n", WSAGetLastError());
 			closesocket(s);
-			WSACleanup();
 			return -1;
 		}
+	}
 	else  {
 		printf("recv failed with error: %d\n", WSAGetLastError());
 		closesocket(s);
-		WSACleanup();
 		return -1;
 	}
 
 	return iResult;
+}
+
+COMMON_API void endComms(SOCKET s)
+{
+	closesocket(s);
 }
 
 COMMON_API int generateHMAC(TCHAR *studentID, int studentIDLen, TCHAR *challengeID, int challengeIDLen, TCHAR *oHash)
