@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Loops", "Loops\Loops.vcxproj", "{B2DDF862-E8B8-4D63-8FEA-F85355DD7665}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Conditionals", "Conditionals\Conditionals.vcxproj", "{972DCCCD-4673-4814-900C-A1CA82B27B36}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Switches", "Switches\Switches.vcxproj", "{69DDC41C-F238-4D8A-BFA2-E296F4D8A7C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2DDF862-E8B8-4D63-8FEA-F85355DD7665}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B2DDF862-E8B8-4D63-8FEA-F85355DD7665}.Debug|Win32.Build.0 = Debug|Win32
+		{B2DDF862-E8B8-4D63-8FEA-F85355DD7665}.Release|Win32.ActiveCfg = Release|Win32
+		{B2DDF862-E8B8-4D63-8FEA-F85355DD7665}.Release|Win32.Build.0 = Release|Win32
+		{972DCCCD-4673-4814-900C-A1CA82B27B36}.Debug|Win32.ActiveCfg = Debug|Win32
+		{972DCCCD-4673-4814-900C-A1CA82B27B36}.Debug|Win32.Build.0 = Debug|Win32
+		{972DCCCD-4673-4814-900C-A1CA82B27B36}.Release|Win32.ActiveCfg = Release|Win32
+		{972DCCCD-4673-4814-900C-A1CA82B27B36}.Release|Win32.Build.0 = Release|Win32
+		{69DDC41C-F238-4D8A-BFA2-E296F4D8A7C9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{69DDC41C-F238-4D8A-BFA2-E296F4D8A7C9}.Debug|Win32.Build.0 = Debug|Win32
+		{69DDC41C-F238-4D8A-BFA2-E296F4D8A7C9}.Release|Win32.ActiveCfg = Release|Win32
+		{69DDC41C-F238-4D8A-BFA2-E296F4D8A7C9}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
