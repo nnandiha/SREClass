@@ -17,27 +17,20 @@
 #include "sha1.h"
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
 
-// This is an example of an exported variable
-COMMON_API int nCommon=0;
-
-// This is an example of an exported function.
-COMMON_API int fnCommon(void)
-{
-	return 42;
-}
-
+//// This is an example of an exported variable
+//COMMON_API int nCommon=0;
+//
+//// This is an example of an exported function.
+//COMMON_API int fnCommon(void)
+//{
+//	return 42;
+//}
 
 static const TCHAR DEFAULT_KEY[] = "PASSWORD";
 static const int KEY_LENGTH = 32;
 
-void NTAPI MyWorkCallback(PTP_CALLBACK_INSTANCE instance, void * context, PTP_WORK work)
-{
-	printf("Hello %s", context);
-}
-
-COMMON_API int startServer(int port, TCHAR *challengeName, int challengeNameLen, PTP_WORK_CALLBACK fCB)
+COMMON_API int startServer(_challengeInfo cInfo)
 {
 	WSADATA wsaData;
 	int iResult;
@@ -62,7 +55,7 @@ COMMON_API int startServer(int port, TCHAR *challengeName, int challengeNameLen,
 	hints.ai_flags = AI_PASSIVE;
 
 	// Resolve the server address and port
-	iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+	iResult = getaddrinfo(NULL, cInfo.port, &hints, &result);
 	if (iResult != 0) {
 		printf("getaddrinfo failed with error: %d\n", iResult);
 		WSACleanup();
@@ -109,7 +102,7 @@ COMMON_API int startServer(int port, TCHAR *challengeName, int challengeNameLen,
 			return 1;
 		}
 
-		TP_WORK *work = CreateThreadpoolWork(fCB, (PVOID)ClientSocket, NULL);
+		TP_WORK *work = CreateThreadpoolWork(cInfo.fCB, (PVOID)ClientSocket, NULL);
 		if (work == NULL)
 			printf("Error %d in CreateThreadpoolWork", GetLastError());
 		else {
@@ -141,11 +134,11 @@ COMMON_API int sendData(SOCKET s, TCHAR *buf, int bufLen, int bytesToSend)
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(s);
 		WSACleanup();
-		return;
+		return -1;
 	}
 	printf("Bytes sent: %d\n", iSendResult);
 
-	return 0;
+	return iSendResult;
 }
 
 COMMON_API int getData(SOCKET s, TCHAR *buf, int bufLen, int bytesToGet)
@@ -178,26 +171,32 @@ COMMON_API int getData(SOCKET s, TCHAR *buf, int bufLen, int bytesToGet)
 		WSACleanup();
 		return -1;
 	}
-	// cleanup
-	closesocket(s);
+
+	return iResult;
 }
 
 COMMON_API int generateHMAC(TCHAR *studentID, int studentIDLen, TCHAR *challengeID, int challengeIDLen, TCHAR *oHash)
 {
 	sha1nfo s;
 	uint8_t key[KEY_LENGTH];
-	int keyLen;
+	DWORD keyLen;
+
+	if (sizeof(DEFAULT_KEY) >= KEY_LENGTH)
+		keyLen = KEY_LENGTH;
+	else
+		keyLen = sizeof(DEFAULT_KEY);
+
+	CopyMemory(key, DEFAULT_KEY, keyLen);
 
 	HANDLE hFile = CreateFile("keyFile.txt", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 	if (hFile == INVALID_HANDLE_VALUE){
-		printf("Error opening keyfile.txt. Using default HMAC key.");
-		
-		if (sizeof(DEFAULT_KEY) >= KEY_LENGTH)
-			keyLen = KEY_LENGTH;
-		else
-			keyLen = sizeof(DEFAULT_KEY);
-
-		CopyMemory(key, DEFAULT_KEY, keyLen);
+		printf("Can't open keyfile.txt. Using default HMAC key.");
+	}
+	else{
+		if (ReadFile(hFile, key, KEY_LENGTH, &keyLen, NULL) == FALSE){
+			printf("Error reading keyfile.txt. Using default HMAC key.");
+		}
+		CloseHandle(hFile);
 	}
 
 	sha1_initHmac(&s, key, keyLen);

@@ -16,8 +16,22 @@
 
 //COMMON_API int fnCommon(void);
 
+struct _challengeInfo{
+	const TCHAR *challengeName;
+//	DWORD challengeNameLen;
+	const TCHAR *port;
+//	DWORD portLen;
+	const TCHAR *category;
+//	DWORD categoryLen;
+	const TCHAR *description;
+//	DWORD descriptionLen;
+	const TCHAR *difficulty;
+//	DWORD difficultyLen;
+	PTP_WORK_CALLBACK fCB;
+};
+
 //Communications functions
-COMMON_API int startServer(int port, TCHAR *challengeName, int challengeNameLen, PTP_WORK_CALLBACK fCB);
+COMMON_API int startServer(_challengeInfo cInfo);
 COMMON_API int sendData(SOCKET s, TCHAR *buf, int bufLen, int bytesToSend);
 COMMON_API int getData(SOCKET s, TCHAR *buf, int bufLen, int bytesToGet);
 

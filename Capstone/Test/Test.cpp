@@ -32,6 +32,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	TCHAR oHash[64];
 	generateHMAC("test", 5, "test", 5, oHash);
 
-	startServer(1234, "test", 5, func);
+//	startServer("1234", "test", 5, func);
 	return 0;
 }
