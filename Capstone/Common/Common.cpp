@@ -75,7 +75,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 	// Setup the TCP listening socket
 	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
-		printf("bind failed with error: %d\n", WSAGetLastError());
+		printf("bind failed with error: %d. Are you already running another copy of this challenge?\n", WSAGetLastError());
 		freeaddrinfo(result);
 		closesocket(ListenSocket);
 		WSACleanup();
@@ -104,7 +104,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 		}
 
 		TCHAR intro[512];
-		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\nPlease enter your username: ", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
 		if (iResult < 0){
 			printf("Error in _stprintf\n");
 			closesocket(ClientSocket);
@@ -138,6 +138,9 @@ COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend)
 {
 	if (buf == NULL || bytesToSend <= 0)
 		return -1;
+
+	if (buf[bytesToSend - 1] == '\0')
+		bytesToSend--; //NULL bytes commonly added to C-strings. Not necessary to send.
 
 	int iSendResult = send(s, buf, bytesToSend, 0);
 	if (iSendResult == SOCKET_ERROR) {
@@ -183,11 +186,14 @@ COMMON_API void endComms(SOCKET s)
 	closesocket(s);
 }
 
-COMMON_API int generateHMAC(TCHAR *studentID, int studentIDLen, TCHAR *challengeID, int challengeIDLen, TCHAR *oHash)
+COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen)
 {
 	sha1nfo s;
 	uint8_t key[KEY_LENGTH];
 	DWORD keyLen;
+
+	if (oHashLen < HMAC_LENGTH)
+		return -1;
 
 	if (sizeof(DEFAULT_KEY) >= KEY_LENGTH)
 		keyLen = KEY_LENGTH;
@@ -212,13 +218,13 @@ COMMON_API int generateHMAC(TCHAR *studentID, int studentIDLen, TCHAR *challenge
 	sha1_write(&s, challengeID, challengeIDLen);
 	uint8_t* hash = sha1_resultHmac(&s);
 
-	//20 bytes in a SHA-1 HMAC
-	wsprintf(oHash, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+	//Convert the HMAC into an ASCII-printable version
+	oHashLen = _stprintf_s(oHash, oHashLen, "%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x",
 		hash[0], hash[1], hash[2], hash[3],
 		hash[4], hash[5], hash[6], hash[7],
 		hash[8], hash[9], hash[10], hash[11],
 		hash[12], hash[13], hash[14], hash[15],
 		hash[16], hash[17], hash[18], hash[19]);
 	
-	return 0;
+	return oHashLen;
 }

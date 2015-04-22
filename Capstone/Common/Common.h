@@ -25,10 +25,13 @@ struct _challengeInfo{
 	PTP_WORK_CALLBACK fCB;
 };
 
+//"XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX\0"
+static const int HMAC_LENGTH = 45; //Number of bytes needed to store our formatted HMAC
+
 //Communications functions
 COMMON_API int startServer(_challengeInfo cInfo);
 COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend);
 COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet);
 COMMON_API void endComms(SOCKET s);
 
-COMMON_API int generateHMAC(TCHAR *studentID, int studentIDLen, TCHAR *challengeID, int challengeIDLen, TCHAR *oHash);
+COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen);

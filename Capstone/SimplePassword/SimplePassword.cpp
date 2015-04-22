@@ -7,18 +7,58 @@
 
 static const TCHAR CHALLENGE_NAME[] = "Challenge 1";
 static const TCHAR PORT[] = "5001";
-static const TCHAR DESCRIPTION[] = "None";
+static const TCHAR DESCRIPTION[] = "As straightforward as they come!";
 static const TCHAR CATEGORY[] = "General";
 static const TCHAR DIFFICULTY[] = "Easy";
 
-void __declspec (dllexport) NTAPI  challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
+static const TCHAR PASSWORD[] = "TrustNo1";
+
+void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 {
-	char buf[32];
+	TCHAR username[32];
+	TCHAR buf[32];
 	SOCKET s = (SOCKET)context;
 
-	getData(s, buf, 4);
-	printf("Got data: %s\n", buf);
-	sendData(s, "Ping\n", 5);
+	int usernameLen = getData(s, username, sizeof(username) - 1);
+	if (usernameLen <= 0){
+		endComms(s);
+		return;
+	}
+	username[usernameLen-1] = '\0'; //Clobber the \n that netcat adds
+	printf("User connected: %s\n", username);
+
+	TCHAR chal1[] = "Enter the password for access: ";
+	if (sendData(s, chal1, sizeof(chal1)) < 0){
+		endComms(s);
+		return;
+	}
+
+	int bufLen = getData(s, buf, sizeof(buf) - 1);
+	if (bufLen <= 0){
+		endComms(s);
+		return;
+	}
+	buf[bufLen - 1] = '\0'; //Clobber the \n that netcat adds
+
+	TCHAR hmac[HMAC_LENGTH];
+	if (strncmp(buf, PASSWORD, sizeof(PASSWORD)) == 0){
+		int hmacLen = generateHMAC(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME), hmac, sizeof(hmac));
+		if (hmacLen < 0){
+			printf("Error generating HMAC.\n");
+			endComms(s);
+			return;
+		}
+
+		TCHAR chal2[] = "Access granted! Your key is:\n";
+		sendData(s, chal2, sizeof(chal2));
+		sendData(s, hmac, hmacLen);
+		sendData(s, "\n", 1);
+	}
+	else{
+		TCHAR chal2[] = "Sorry, that's not the correct password. Please try again later.\n";
+		sendData(s, chal2, sizeof(chal2));
+	}
+
 	endComms(s);
 }
 
@@ -35,7 +75,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	startServer(cInfo);
 
 	while (1)
-		Sleep(5000);
+		Sleep(30000);
 	return 0;
 }
 
