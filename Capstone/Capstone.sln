@@ -22,6 +22,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimplePickNumber", "SimpleP
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serial", "Serial\Serial.vcxproj", "{23034EBE-6221-471F-9E7C-B983B412586B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LCG", "LCG\LCG.vcxproj", "{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -48,6 +50,10 @@ Global
 		{23034EBE-6221-471F-9E7C-B983B412586B}.Debug|Win32.Build.0 = Debug|Win32
 		{23034EBE-6221-471F-9E7C-B983B412586B}.Release|Win32.ActiveCfg = Release|Win32
 		{23034EBE-6221-471F-9E7C-B983B412586B}.Release|Win32.Build.0 = Release|Win32
+		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Debug|Win32.Build.0 = Debug|Win32
+		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Release|Win32.ActiveCfg = Release|Win32
+		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

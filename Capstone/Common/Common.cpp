@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <tchar.h>
+#include <time.h>
 
 #include "sha1.h"
 
@@ -187,6 +188,12 @@ COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet)
 COMMON_API void endComms(SOCKET s)
 {
 	closesocket(s);
+}
+
+COMMON_API int getPseudoRand()
+{
+	srand((unsigned int)time(NULL));
+	return rand();
 }
 
 COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen)
