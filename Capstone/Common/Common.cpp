@@ -71,7 +71,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 		WSACleanup();
 		return 1;
 	}
-
+	
 	// Setup the TCP listening socket
 	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
@@ -83,6 +83,9 @@ COMMON_API int startServer(_challengeInfo cInfo)
 	}
 
 	freeaddrinfo(result);
+
+	printf("Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+	printf("Listening on port %s\n", cInfo.port);
 
 	while (1)
 	{
@@ -148,7 +151,7 @@ COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend)
 		closesocket(s);
 		return -1;
 	}
-	printf("Bytes sent: %d\n", iSendResult);
+//	printf("Bytes sent: %d\n", iSendResult);
 
 	return iSendResult;
 }
@@ -160,7 +163,7 @@ COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet)
 	
 	int iResult = recv(s, buf, bytesToGet, 0);
 	if (iResult > 0) {
-		printf("Bytes received: %d\n", iResult);
+//		printf("Bytes received: %d\n", iResult);
 	}
 	else if (iResult == 0){
 		printf("Connection closing...\n");
