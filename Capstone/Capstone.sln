@@ -24,6 +24,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serial", "Serial\Serial.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LCG", "LCG\LCG.vcxproj", "{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MungedPassword", "MungedPassword\MungedPassword.vcxproj", "{1BF837CC-3635-4F18-B676-BEABE783F400}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructMath", "StructMath\StructMath.vcxproj", "{00C60E09-D17C-41A7-A915-03A736EBC3B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XorGame", "XorGame\XorGame.vcxproj", "{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -54,6 +60,18 @@ Global
 		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Debug|Win32.Build.0 = Debug|Win32
 		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Release|Win32.ActiveCfg = Release|Win32
 		{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}.Release|Win32.Build.0 = Release|Win32
+		{1BF837CC-3635-4F18-B676-BEABE783F400}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1BF837CC-3635-4F18-B676-BEABE783F400}.Debug|Win32.Build.0 = Debug|Win32
+		{1BF837CC-3635-4F18-B676-BEABE783F400}.Release|Win32.ActiveCfg = Release|Win32
+		{1BF837CC-3635-4F18-B676-BEABE783F400}.Release|Win32.Build.0 = Release|Win32
+		{00C60E09-D17C-41A7-A915-03A736EBC3B6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{00C60E09-D17C-41A7-A915-03A736EBC3B6}.Debug|Win32.Build.0 = Debug|Win32
+		{00C60E09-D17C-41A7-A915-03A736EBC3B6}.Release|Win32.ActiveCfg = Release|Win32
+		{00C60E09-D17C-41A7-A915-03A736EBC3B6}.Release|Win32.Build.0 = Release|Win32
+		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Debug|Win32.Build.0 = Debug|Win32
+		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.ActiveCfg = Release|Win32
+		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

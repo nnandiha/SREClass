@@ -11,6 +11,12 @@ static const TCHAR DESCRIPTION[] = "As straightforward as they come!";
 static const TCHAR CATEGORY[] = "General";
 static const TCHAR DIFFICULTY[] = "Easy";
 
+/*
+This challenge requires the student to type in the correct password. The
+password is clearly available in the code, so it should be fairly
+straightforward to locate by the student.
+*/
+
 static const TCHAR PASSWORD[] = "TrustNo1";
 
 void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)

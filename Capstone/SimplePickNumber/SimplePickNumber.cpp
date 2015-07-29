@@ -12,6 +12,12 @@ static const TCHAR DESCRIPTION[] = "Try to pick the right number.";
 static const TCHAR CATEGORY[] = "General";
 static const TCHAR DIFFICULTY[] = "Easy";
 
+/*
+This challenge requires the student to type in the correct number. This magic
+number is contained within a switch statement, and requires the student to
+understand how switch statements work in assembly. The magic number is 73882.
+*/
+
 void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 {
 	TCHAR username[32];
