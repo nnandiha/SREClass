@@ -30,6 +30,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructMath", "StructMath\St
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XorGame", "XorGame\XorGame.vcxproj", "{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HMACVerifier", "HMACVerifier\HMACVerifier.vcxproj", "{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -72,6 +74,10 @@ Global
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Debug|Win32.Build.0 = Debug|Win32
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.ActiveCfg = Release|Win32
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.Build.0 = Release|Win32
+		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Debug|Win32.Build.0 = Debug|Win32
+		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.ActiveCfg = Release|Win32
+		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

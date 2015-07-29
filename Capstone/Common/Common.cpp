@@ -85,7 +85,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 
 	freeaddrinfo(result);
 
-	printf("Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+	printf("Challenge ID:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
 	printf("Listening on port %s\n", cInfo.port);
 
 	while (1)
@@ -108,7 +108,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 		}
 
 		TCHAR intro[512];
-		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\nPlease enter your username: ", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\nPlease enter your student ID: ", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
 		if (iResult < 0){
 			printf("Error in _stprintf\n");
 			closesocket(ClientSocket);
@@ -237,4 +237,49 @@ COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHA
 		hash[16], hash[17], hash[18], hash[19]);
 	
 	return oHashLen;
+}
+
+COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *userHash, int userHashLen)
+{
+	sha1nfo s;
+	uint8_t key[KEY_LENGTH];
+	DWORD keyLen;
+
+	TCHAR checkHash[HMAC_LENGTH];
+
+	if (userHashLen != HMAC_LENGTH)
+		return -1;
+
+	HANDLE hFile = CreateFile("keyFile.txt", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile == INVALID_HANDLE_VALUE){
+		printf("Can't open keyfile.txt. Unable to verify HMAC.");
+		return -2;
+	}
+	else{
+		if (ReadFile(hFile, key, KEY_LENGTH, &keyLen, NULL) == FALSE){
+			printf("Error reading keyfile.txt. Unable to verify HMAC.");
+			CloseHandle(hFile);
+			return -3;
+		}
+		CloseHandle(hFile);
+	}
+
+	sha1_initHmac(&s, key, keyLen);
+	sha1_write(&s, studentID, studentIDLen);
+	sha1_write(&s, challengeID, challengeIDLen);
+	uint8_t* hash = sha1_resultHmac(&s);
+
+	//Convert the HMAC into an ASCII-printable version
+	_stprintf_s(checkHash, sizeof(checkHash), "%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x-%02x%02x%02x%02x",
+		hash[0], hash[1], hash[2], hash[3],
+		hash[4], hash[5], hash[6], hash[7],
+		hash[8], hash[9], hash[10], hash[11],
+		hash[12], hash[13], hash[14], hash[15],
+		hash[16], hash[17], hash[18], hash[19]);
+
+	//return oHashLen;
+	if (strncmp(checkHash, userHash, HMAC_LENGTH) == 0)
+		return 1;
+	else
+		return 0;
 }
