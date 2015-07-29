@@ -6,7 +6,7 @@
 
 #include "Common.h"
 
-static const TCHAR CHALLENGE_NAME[] = "GEN2";
+static const TCHAR CHALLENGE_NAME[] = "GEN4";
 static const TCHAR PORT[] = "39002";
 static const TCHAR DESCRIPTION[] = "Try to pick the right number.";
 static const TCHAR CATEGORY[] = "General";

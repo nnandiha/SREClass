@@ -9,7 +9,7 @@
 static const TCHAR CHALLENGE_NAME[] = "CR1";
 static const TCHAR PORT[] = "39004";
 static const TCHAR DESCRIPTION[] = "Figure out the next number in the sequence.";
-static const TCHAR CATEGORY[] = "General";
+static const TCHAR CATEGORY[] = "Crypto";
 static const TCHAR DIFFICULTY[] = "Easy";
 
 /*
