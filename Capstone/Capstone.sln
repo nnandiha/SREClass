@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{913CF434-DAA6-4035-A90C-2BE0809CA424}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{6A4C3B07-A9EA-4753-9797-ED326F5A4E73}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zTest", "Test\Test.vcxproj", "{6A4C3B07-A9EA-4753-9797-ED326F5A4E73}"
 	ProjectSection(ProjectDependencies) = postProject
 		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
 	EndProjectSection
@@ -21,16 +21,36 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimplePickNumber", "SimpleP
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serial", "Serial\Serial.vcxproj", "{23034EBE-6221-471F-9E7C-B983B412586B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LCG", "LCG\LCG.vcxproj", "{4BCA0B84-180B-4D15-B680-7C9D7343AD3C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MungedPassword", "MungedPassword\MungedPassword.vcxproj", "{1BF837CC-3635-4F18-B676-BEABE783F400}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructMath", "StructMath\StructMath.vcxproj", "{00C60E09-D17C-41A7-A915-03A736EBC3B6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XorGame", "XorGame\XorGame.vcxproj", "{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HMACVerifier", "HMACVerifier\HMACVerifier.vcxproj", "{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhackAMole", "WhackAMole\WhackAMole.vcxproj", "{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +98,10 @@ Global
 		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Debug|Win32.Build.0 = Debug|Win32
 		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.ActiveCfg = Release|Win32
 		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.Build.0 = Release|Win32
+		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Debug|Win32.Build.0 = Debug|Win32
+		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Release|Win32.ActiveCfg = Release|Win32
+		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
