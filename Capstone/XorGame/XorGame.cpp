@@ -8,7 +8,7 @@
 
 #include "Common.h"
 
-static const TCHAR CHALLENGE_NAME[] = "GEN4";
+static const TCHAR CHALLENGE_NAME[] = "GEN6";
 static const TCHAR PORT[] = "39007";
 static const TCHAR DESCRIPTION[] = "A race to zero";
 static const TCHAR CATEGORY[] = "General";
