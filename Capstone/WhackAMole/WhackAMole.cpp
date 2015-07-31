@@ -19,16 +19,50 @@ on the other moles, so the student needs to analyze these effects to knock all o
 
 Whacking a mole will always cause that mole to drop. i.e. the side effect on that mole is ignored
 Side effects:
-1- Causes 1 random mole that isn't up already up to pop up
+1- Causes 1 random mole that isn't already up to pop up
 2- Pops up mole 5 and 1
 3- No effect, but this mole pops up on every 3rd whack
 4- Pops up mole 8
 5- Causes 2 random moles to pop up. Effect ignored if mole is already up.
 6- If the previous whack was an even mole, no effect. Otherwise pops up mole 9 and 3
-7- Causes one random mole to drop. Effect ignored if mole is already down.
+7- Causes one random mole to drop or pop up alternatingly. Effect ignored if mole is already in desired state.
 8- Causes all moles to invert
-9- Inverts the mole corresponding to the total number of whacks so far (mod 10)
+9- Inverts the mole corresponding to the total number of whacks so far (mod 9)
 */
+
+static const int NUMMOLES = 9;
+static const int MOLE1 = 0;
+static const int MOLE2 = 1;
+static const int MOLE3 = 2;
+static const int MOLE4 = 3;
+static const int MOLE5 = 4;
+static const int MOLE6 = 5;
+static const int MOLE7 = 6;
+static const int MOLE8 = 7;
+static const int MOLE9 = 8;
+int molehill[9];
+
+void printMoles(SOCKET s)
+{
+	char buf[128];
+	int bufLen = sprintf_s(	buf,
+							sizeof(buf),
+							"1 2 3 4 5 6 7 8 9\n%c %c %c %c %c %c %c %c %c\nWhich mole would you like to whack? ",
+							(char)(0x30 + molehill[MOLE1] * 0x10),
+							(char)(0x30 + molehill[MOLE2] * 0x10),
+							(char)(0x30 + molehill[MOLE3] * 0x10),
+							(char)(0x30 + molehill[MOLE4] * 0x10),
+							(char)(0x30 + molehill[MOLE5] * 0x10),
+							(char)(0x30 + molehill[MOLE6] * 0x10),
+							(char)(0x30 + molehill[MOLE7] * 0x10),
+							(char)(0x30 + molehill[MOLE8] * 0x10),
+							(char)(0x30 + molehill[MOLE9] * 0x10)
+							);
+	if (sendData(s, buf, bufLen) < 0){
+		endComms(s);
+		return;
+	}
+}
 
 void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 {
@@ -43,45 +77,110 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	}
 	username[usernameLen - 1] = '\0'; //Clobber the \n that netcat adds
 	printf("User connected: %s\n", username);
-
-/*
+	
 	srand(time(NULL));
-	int num = rand();
-	int popcnt = _mm_popcnt_u32(num);
+	molehill[MOLE1] = rand() % 2;
+	molehill[MOLE2] = rand() % 2;
+	molehill[MOLE3] = rand() % 2;
+	molehill[MOLE4] = rand() % 2;
+	molehill[MOLE5] = rand() % 2;
+	molehill[MOLE6] = rand() % 2;
+	molehill[MOLE7] = rand() % 2;
+	molehill[MOLE8] = rand() % 2;
+	molehill[MOLE9] = rand() % 2;
 
-	int bufLen = sprintf_s(buf, sizeof(buf), "Your target is: %d\n", num);
-	if (sendData(s, buf, bufLen) < 0){
-		endComms(s);
-		return;
-	}
+	int numWhacks = 0;
+	char lastWhack = '0';
+	int state7 = 0;
 
-	for (int i = 0; i < popcnt; i++)
-	{
-		int bufLen = sprintf_s(buf, sizeof(buf), "Please enter a number. You have %d entries left:  ", (popcnt - i));
-		if (sendData(s, buf, bufLen) < 0){
-			endComms(s);
-			return;
-		}
+	while (numWhacks < 20) {
+		printMoles(s);
 
-		bufLen = getData(s, buf, sizeof(buf) - 1);
+		int bufLen = getData(s, buf, sizeof(buf) - 1);
 		if (bufLen <= 0){
 			endComms(s);
 			return;
 		}
 		buf[bufLen - 1] = '\0'; //Clobber the \n that netcat adds
 
-		int xorVal = _tstoi(buf);
-		if (_mm_popcnt_u32(xorVal) != 1)
-		{
-			endComms(s);
-			return;
+		if (buf[0] < '1' || buf[0] > '9'){
+			char noWhack[] = "That mole is not whackable!\n";
+			if (sendData(s, noWhack, sizeof(noWhack)) < 0){
+				endComms(s);
+				return;
+			}
+			continue;
 		}
 
-		num ^= xorVal;
-	}*/
+		numWhacks++;
 
+		if (numWhacks % 3 == 0){
+			molehill[MOLE3] = 1;
+		}
+
+		char sel = buf[0];
+		if (sel == '1'){
+			
+
+			molehill[MOLE1] = 0;
+		}
+		else if (sel == '2'){
+			molehill[MOLE1] = 1;
+			molehill[MOLE5] = 1;
+
+			molehill[MOLE2] = 0;
+		}
+		else if (sel == '3'){
+			molehill[MOLE3] = 0;
+		}
+		else if (sel == '4'){
+			molehill[MOLE8] = 1;
+
+			molehill[MOLE4] = 0;
+		}
+		else if (sel == '5'){
+			molehill[rand() % NUMMOLES] = 1;
+			molehill[rand() % NUMMOLES] = 1;
+
+			molehill[MOLE5] = 0;
+		}
+		else if (sel == '6'){
+			if (lastWhack % 2 == 0){
+				molehill[MOLE3] = 1;
+				molehill[MOLE9] = 1;
+			}
+
+			molehill[MOLE6] = 0;
+		}
+		else if (sel == '7'){
+			molehill[rand() % NUMMOLES] = state7;
+			state7 ^= 1;
+
+			molehill[MOLE7] = 0;
+		}
+		else if (sel == '8'){
+			for (int i = 0; i < NUMMOLES; i++){
+				molehill[i] ^= 1;
+			}
+
+			molehill[MOLE8] = 0;
+		}
+		else if (sel == '9'){
+			molehill[numWhacks % NUMMOLES] ^= 1;
+
+			molehill[MOLE9] = 0;
+		}
+		lastWhack = sel;
+	}
+
+	int allWhacked = 1;
+	for (int i = 0; i < NUMMOLES; i++){
+		if (molehill[i] == 1)
+			allWhacked = 0;
+	}
+	
 	TCHAR hmac[HMAC_LENGTH];
-	if (num == 0){
+	if (allWhacked == 1){
 		int hmacLen = generateHMAC(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME), hmac, sizeof(hmac));
 		if (hmacLen < 0){
 			printf("Error generating HMAC.\n");
