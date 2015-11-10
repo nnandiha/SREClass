@@ -59,8 +59,8 @@ Character 0 is 'X'
 Character 1 is a number
 Character 2 is 'a' or 'A'
 Character 3 is not alphanumeric
-If buf len is 4, character 4 must equal character 3
-If buf len is 5, character 5 must equal character 2
+If buf len is 5, character 4 must equal character 3
+If buf len is 6, character 5 must equal character 2
 */
 bool check3(char *buf)
 {
@@ -120,6 +120,11 @@ __declspec (dllexport) int main(int argc, char ** argv)
 	if (check3(argv[2]))
 	{
 		printf("Congratulations! You have solved this exercise.");
+		return 0;
+	}
+	else
+	{
+		printf("Close, but no cigar!");
 		return 0;
 	}
 
