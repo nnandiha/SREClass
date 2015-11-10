@@ -9,7 +9,7 @@ static const TCHAR CHALLENGE_NAME[] = "GEN2";
 static const TCHAR PORT[] = "39005";
 static const TCHAR DESCRIPTION[] = "Enter the password for access.";
 static const TCHAR CATEGORY[] = "General";
-static const TCHAR DIFFICULTY[] = "Medium";
+static const TCHAR DIFFICULTY[] = "2/5";
 
 /*
 This challenge requires the student to type in the correct password. This 

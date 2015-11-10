@@ -12,7 +12,7 @@ static const TCHAR CHALLENGE_NAME[] = "GEN6";
 static const TCHAR PORT[] = "39007";
 static const TCHAR DESCRIPTION[] = "A race to zero";
 static const TCHAR CATEGORY[] = "General";
-static const TCHAR DIFFICULTY[] = "Medium";
+static const TCHAR DIFFICULTY[] = "4/5";
 
 /*
 This challenge starts by printing a random number N to the student. The goal is for the student

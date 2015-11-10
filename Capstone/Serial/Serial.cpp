@@ -9,7 +9,7 @@ static const TCHAR CHALLENGE_NAME[] = "GEN3";
 static const TCHAR PORT[] = "39003";
 static const TCHAR DESCRIPTION[] = "Reverse engineer the serial number verification algorithm.";
 static const TCHAR CATEGORY[] = "General";
-static const TCHAR DIFFICULTY[] = "Medium";
+static const TCHAR DIFFICULTY[] = "3/5";
 
 /*
 This challenge requires a valid serial number to be entered. A serial must be of the form:

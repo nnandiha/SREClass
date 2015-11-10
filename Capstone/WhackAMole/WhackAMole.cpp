@@ -11,7 +11,7 @@ static const TCHAR CHALLENGE_NAME[] = "GEN7";
 static const TCHAR PORT[] = "39009";
 static const TCHAR DESCRIPTION[] = "Can you whack all of the moles?";
 static const TCHAR CATEGORY[] = "General";
-static const TCHAR DIFFICULTY[] = "Medium";
+static const TCHAR DIFFICULTY[] = "4/5";
 
 /*
 This challenge consists of 10 "moles" that the student needs to whack. Each whack has a side effect
@@ -48,20 +48,30 @@ void printMoles(SOCKET s)
 	int bufLen = sprintf_s(	buf,
 							sizeof(buf),
 							"1 2 3 4 5 6 7 8 9\n%c %c %c %c %c %c %c %c %c\nWhich mole would you like to whack? ",
-							(char)(0x30 + molehill[MOLE1] * 0x10),
-							(char)(0x30 + molehill[MOLE2] * 0x10),
-							(char)(0x30 + molehill[MOLE3] * 0x10),
-							(char)(0x30 + molehill[MOLE4] * 0x10),
-							(char)(0x30 + molehill[MOLE5] * 0x10),
-							(char)(0x30 + molehill[MOLE6] * 0x10),
-							(char)(0x30 + molehill[MOLE7] * 0x10),
-							(char)(0x30 + molehill[MOLE8] * 0x10),
-							(char)(0x30 + molehill[MOLE9] * 0x10)
+							(char)(0x2D + molehill[MOLE1] * 0x13),
+							(char)(0x2D + molehill[MOLE2] * 0x13),
+							(char)(0x2D + molehill[MOLE3] * 0x13),
+							(char)(0x2D + molehill[MOLE4] * 0x13),
+							(char)(0x2D + molehill[MOLE5] * 0x13),
+							(char)(0x2D + molehill[MOLE6] * 0x13),
+							(char)(0x2D + molehill[MOLE7] * 0x13),
+							(char)(0x2D + molehill[MOLE8] * 0x13),
+							(char)(0x2D + molehill[MOLE9] * 0x13)
 							);
 	if (sendData(s, buf, bufLen) < 0){
 		endComms(s);
 		return;
 	}
+}
+
+bool checkMoles()
+{
+	bool allWhacked = true;
+	for (int i = 0; i < NUMMOLES; i++){
+		if (molehill[i] == 1)
+			allWhacked = false;
+	}
+	return allWhacked;
 }
 
 void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
@@ -93,9 +103,9 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	char lastWhack = '0';
 	int state7 = 0;
 
-	while (numWhacks < 20) {
-		printMoles(s);
+	printMoles(s);
 
+	while (numWhacks < 20) {
 		int bufLen = getData(s, buf, sizeof(buf) - 1);
 		if (bufLen <= 0){
 			endComms(s);
@@ -114,8 +124,8 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 
 		numWhacks++;
 
-		if (numWhacks % 3 == 0){
-			molehill[MOLE3] = 1;
+		if (numWhacks % 2 == 0){
+			molehill[numWhacks % NUMMOLES] = 1;
 		}
 
 		char sel = buf[0];
@@ -171,16 +181,14 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 			molehill[MOLE9] = 0;
 		}
 		lastWhack = sel;
-	}
 
-	int allWhacked = 1;
-	for (int i = 0; i < NUMMOLES; i++){
-		if (molehill[i] == 1)
-			allWhacked = 0;
+		printMoles(s);
+		if (checkMoles())
+			break;
 	}
 	
 	TCHAR hmac[HMAC_LENGTH];
-	if (allWhacked == 1){
+	if (checkMoles()){
 		int hmacLen = generateHMAC(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME), hmac, sizeof(hmac));
 		if (hmacLen < 0){
 			printf("Error generating HMAC.\n");

@@ -10,7 +10,7 @@ static const TCHAR CHALLENGE_NAME[] = "GEN4";
 static const TCHAR PORT[] = "39002";
 static const TCHAR DESCRIPTION[] = "Try to pick the right number.";
 static const TCHAR CATEGORY[] = "General";
-static const TCHAR DIFFICULTY[] = "Easy";
+static const TCHAR DIFFICULTY[] = "1/5";
 
 /*
 This challenge requires the student to type in the correct number. This magic

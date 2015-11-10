@@ -10,7 +10,7 @@ static const TCHAR CHALLENGE_NAME[] = "CR1";
 static const TCHAR PORT[] = "39004";
 static const TCHAR DESCRIPTION[] = "Figure out the next number in the sequence.";
 static const TCHAR CATEGORY[] = "Crypto";
-static const TCHAR DIFFICULTY[] = "Easy";
+static const TCHAR DIFFICULTY[] = "2/5";
 
 /*
 This challenge requires the student to simulate a Linear Congruential Generator. The LCG is
