@@ -9,7 +9,7 @@ from datetime import date
 
 if len(sys.argv) != 3:
 	print "Usage: %s <username> <Challenge ID>" % (sys.argv[0])
-	exit(-1)
+	sys.exit(1)
 	
 client = MongoClient('localhost', 27017)
 db = client.sre
@@ -20,12 +20,12 @@ classID = 1
 
 #Do some validation. Whitelist would be better...
 if '$' in username:
-	exit(-1)
+	sys.exit(1)
 if '$' in challengeID:
-	exit(-1)
+	sys.exit(1)
 
-flag = {"username":username, "challengeID":challengeID, "timestamp":datetime.now(), "classID":classID}
+query = {"username":username, "challengeID":challengeID, "classID":classID}
+flag = {"username":username, "challengeID":challengeID, "classID":classID, "timestamp":datetime.now()}
 flags = db.flags
-flag_id = flags.insert_one(flag).inserted_id
-#print flag_id
-exit(0)
+flag_id = flags.update(query, flag, upsert=True)
+sys.exit(0)

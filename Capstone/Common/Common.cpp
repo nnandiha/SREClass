@@ -31,6 +31,8 @@
 
 static const TCHAR DEFAULT_KEY[] = "PASSWORD";
 static const int KEY_LENGTH = 32;
+static const TCHAR PYTHON_PATH[] = "C:\\Python27\\python.exe";
+static const TCHAR PYTHON_SCRIPT[] = "SubmitFlag.py";
 
 COMMON_API int startServer(_challengeInfo cInfo)
 {
@@ -282,4 +284,46 @@ COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR 
 		return 1;
 	else
 		return 0;
+}
+
+COMMON_API int submitFlag(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen)
+{
+	CHAR cmdLine[MAX_PATH];
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+	DWORD dwExitCode;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	STARTUPINFO *lpStartupInfo = &si;
+	PROCESS_INFORMATION *lpProcessInformation = &pi;
+
+	_snprintf_s(cmdLine, MAX_PATH * sizeof(cmdLine[0]), MAX_PATH, "%s %s %s %s", PYTHON_PATH, PYTHON_SCRIPT, studentID, challengeID);
+
+	if (CreateProcess(NULL, cmdLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, lpStartupInfo, lpProcessInformation) == FALSE)
+	{
+		printf("Error creating process\n");
+		return -1;
+	}
+	Sleep(3000);
+	if(GetExitCodeProcess(pi.hProcess, &dwExitCode) == FALSE)
+	{
+		printf("Error getting return code\n");
+		return -1;
+	}
+
+	printf("Child return code: %d\n", dwExitCode);
+
+	if (dwExitCode == 0)
+	{
+		printf("Flag submitted successfully!\n");
+		return 0;
+	}
+	else
+	{
+		printf("Error submitting flag.\n");
+		return -1;
+	}
 }

@@ -64,23 +64,18 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	}
 	buf[bufLen - 1] = '\0'; //Clobber the \n that netcat adds
 
-	TCHAR hmac[HMAC_LENGTH];
-
 	match = stepLCG(state);
 	int guess = _tstoi(buf);
 
 	if (match == guess){
-		int hmacLen = generateHMAC(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME), hmac, sizeof(hmac));
-		if (hmacLen < 0){
-			printf("Error generating HMAC.\n");
-			endComms(s);
-			return;
+		if (submitFlag(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME)) == 0){
+			TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
+			sendData(s, chal2, sizeof(chal2));
 		}
-
-		TCHAR chal2[] = "Access granted! Your key is:\n";
-		sendData(s, chal2, sizeof(chal2));
-		sendData(s, hmac, hmacLen);
-		sendData(s, "\n", 1);
+		else{
+			TCHAR chal2[] = "You solved this challenge, but there was a problem submitting your flag. Try again or ask for assistance.\n";
+			sendData(s, chal2, sizeof(chal2));
+		}
 	}
 	else{
 		TCHAR chal2[] = "That is not the next number in the sequence. Please try again. Or not.\n";
