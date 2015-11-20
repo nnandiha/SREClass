@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <time.h>
+#include <Shlwapi.h>
 
 #include "sha1.h"
 
@@ -286,7 +287,7 @@ COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR 
 		return 0;
 }
 
-COMMON_API int submitFlag(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen)
+COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty)
 {
 	CHAR cmdLine[MAX_PATH];
 	STARTUPINFO si;
@@ -300,7 +301,13 @@ COMMON_API int submitFlag(const TCHAR *studentID, int studentIDLen, const TCHAR 
 	STARTUPINFO *lpStartupInfo = &si;
 	PROCESS_INFORMATION *lpProcessInformation = &pi;
 
-	_snprintf_s(cmdLine, MAX_PATH * sizeof(cmdLine[0]), MAX_PATH, "%s %s %s %s", PYTHON_PATH, PYTHON_SCRIPT, studentID, challengeID);
+	_snprintf_s(cmdLine, MAX_PATH * sizeof(cmdLine[0]), MAX_PATH, "%s %s %s %s %c", PYTHON_PATH, PYTHON_SCRIPT, studentID, challengeID, difficulty[0]);
+
+	if (PathFileExists(PYTHON_SCRIPT) == FALSE)
+	{
+		printf("Flag submission script not found.\n");
+		return -2;
+	}
 
 	if (CreateProcess(NULL, cmdLine, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, lpStartupInfo, lpProcessInformation) == FALSE)
 	{

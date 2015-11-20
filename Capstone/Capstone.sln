@@ -51,6 +51,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HMACVerifier", "HMACVerifie
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WhackAMole", "WhackAMole\WhackAMole.vcxproj", "{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScoringService", "ScoringService", "{44CE4790-DA30-4BBA-BC40-0E4F17B78CFE}"
 	ProjectSection(SolutionItems) = preProject

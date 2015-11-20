@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Scoring Server">
+    <meta name="author" content="Nayan Nandihalli">
+
+    <title>Threat Model Assistant</title>
+
+    <link href="/stylesheets/bootstrap.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+  
+  <div class="container">
+    <ui-view>
+    {{test}}
+    </ui-view>
+  </div>
+
+  <div class="container">
+      <hr>
+      <!-- Footer -->
+      <footer>
+          <div class="row">
+              <div class="col-lg-12">
+                  <p>Intel Services Division</p>
+              </div>
+          </div>
+      </footer>
+
+  </div>
+  <!-- /.container -->
+
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/bootstrap.js"></script>
+  <script src="/javascripts/angular.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+  <script type="text/javascript" src="/javascripts/ui-bootstrap-tpls-0.14.0.min.js"></script>
+  
+  <script src="/javascripts/ScoringServer.js"></script>
+  
+  <script type="text/ng-template" id="/home.html">
+  <!-- Page Content -->
+    <div class="container">
+      <h3 class="well well-sm">Current Top 3 Scores</h3>
+      
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div ng-repeat="score in scores">
+              <div class="col-md-6">{{score.username}}</div>
+              <div class="col-md-6">{{score.points}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      <h3 class="well well-sm">Last 3 Flags Submitted</h3>
+        
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-primary">
+            <div ng-repeat="flag in flags">
+              <div class="col-md-4">{{flag.username}}</div>
+              <div class="col-md-4">{{flag.challengeID}}</div>
+              <div class="col-md-4">{{flag.timestamp}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </script>
+</body>
+
+</html>

@@ -188,8 +188,13 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	}
 	
 	if (checkMoles()){
-		if (submitFlag(username, usernameLen, CHALLENGE_NAME, sizeof(CHALLENGE_NAME)) == 0){
+		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY);
+		if (result == 0){
 			TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
+			sendData(s, chal2, sizeof(chal2));
+		}
+		else if (result == -2){
+			TCHAR chal2[] = "You have solved this challenge, but the flag submission script was not found. This probably means you were running it locally and not on the instructor's server.\n";
 			sendData(s, chal2, sizeof(chal2));
 		}
 		else{

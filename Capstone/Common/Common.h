@@ -40,4 +40,4 @@ COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHA
 COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *hash, int hashLen);
 
 //Flag functions
-COMMON_API int submitFlag(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen);
+COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty);
