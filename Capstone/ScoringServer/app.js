@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 require('./models/Flags');
 require('./models/Scores');
 
-mongoose.connect('mongodb://10.54.32.149/sre');
+mongoose.connect('mongodb://127.0.0.1/sre');
 
 var app = express();
 

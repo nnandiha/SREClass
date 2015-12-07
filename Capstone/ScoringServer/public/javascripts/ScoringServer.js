@@ -9,8 +9,14 @@ app.config([
       .state('home', {
         url: '/home',
         templateUrl: '/home.html',
-        controller: 'MainCtrl',
-        resolve: {
+      });
+		
+		$stateProvider
+			.state('scores', {
+				url: '/scores',
+				templateUrl: '/scores.html',
+				controller: 'MainCtrl',
+				resolve: {
           postPromise: ['items', function(items){
             return items.getAllElements();
           }]

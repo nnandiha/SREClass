@@ -9,7 +9,7 @@
     <meta name="description" content="Scoring Server">
     <meta name="author" content="Nayan Nandihalli">
 
-    <title>Threat Model Assistant</title>
+    <title>SRE Scoring Server</title>
 
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
 
@@ -53,6 +53,49 @@
   <script src="/javascripts/ScoringServer.js"></script>
   
   <script type="text/ng-template" id="/home.html">
+  <!-- Page Content -->
+    <div class="container">
+      
+      <div class="row">
+        <div class="col-md-12">
+					<h1><center>Capstone</center></h1>
+					
+					<h2>Introduction</h2>
+					<p>
+						The capstone is the “final exam” of this software reverse engineering course. You will be provided with a set of challenges which you must reverse engineer in order to solve. You will (obviously) have access to the binaries in order to analyze them, but they are not able to generate valid flags while running on your local machines. In order to get credit for solving a challenge, you must retrieve your flag from the instructor’s server. This is to ensure students understand the logic of the problem instead of just modifying EIP in a debugger.
+					</p>
+					<p>
+						The challenges are independent and you may complete them in any order you choose. They vary in difficulty from easy to very hard. Don’t expect to complete them all- the hardest challenges contain techniques that were not covered in class. They are not ordered in any particular way, but each one will give you general information when you run it including a short description, the port it listens on, and its (subjective) difficulty level.
+					</p>
+					<p>
+						<center><b>You must complete at least one challenge in order to receive course credit.</b></center>
+					</p>
+					
+					<h2>Challenges</h2>
+					<p>
+						All of the challenges should have been provided to you on the first day in an encrypted zip. The password is UncreativePassword.
+					</p>
+					<p>
+						Upon starting a challenge, it will open a socket on your local machine and print out the port it is listening on. All of the challenges are non-malicious and safe to run on your local machine. You may communicate with them using netcat, which is provided in your tools directory. The connection syntax is <b>nc &lt;hostname or IP> &lt;port></b>. To connect to a challenge running on your localhost and listening on port 39001, <code>nc localhost 39001</code> would be the proper syntax.
+					</p>
+					<p>
+						Each challenge will require you to input some particular data to “win”. Everything is fair game. You are free to use any techniques you learned in class or any prior knowledge. The instructor, at his discretion, will award bonus points for unexpected discoveries (e.g. an unintended exploitable vulnerability in a challenge). Once you understand the challenge logic, you must obtain your “flag” from the instructor’s server. The IP address of the instructor server will be provided in class.
+					</p>
+					<p>
+						All of the challenges use a similar template, so as you start to understand certain things (e.g. network communication) you will be able to save time on other challenges. Additionally, they all use a DLL (Common.dll) that provides utility functionality such as socket communication and flag generation. You are welcome to reverse engineer it but doing so will not help you solve the challenges, so don’t waste your time.
+					</p>
+					
+					<h2>Competition</h2>
+					<p>
+						The first student to complete all of the challenges will win a prize, to be revealed in class. If no student solves all of them, the student with the most points wins. Points are awarded based on challenge difficulty (100 * difficulty). The <a href="#/scores">scoring page</a> tracks the students with the highest score as well as identifying who has most recently solved a challenge. You must use a consistent name across all of the challenges to ensure your score is correctly tracked.
+					</p>
+        </div>
+      </div>
+			
+        
+  </script>
+  
+  <script type="text/ng-template" id="/scores.html">
   <!-- Page Content -->
     <div class="container">
       <h3 class="well well-sm">Current Top 3 Scores</h3>
