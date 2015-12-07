@@ -60,6 +60,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScoringService", "ScoringSe
 		SubmitFlag.py = SubmitFlag.py
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DropListenerExe", "DropListenerExe\DropListenerExe.vcxproj", "{8E6FC051-7F89-4FFD-A8A9-A287ACE9157F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+		{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027} = {BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DropListenerExeChild", "DropListenerExeChild\DropListenerExeChild.vcxproj", "{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}"
+	ProjectSection(ProjectDependencies) = postProject
+		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -110,6 +121,14 @@ Global
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Debug|Win32.Build.0 = Debug|Win32
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Release|Win32.ActiveCfg = Release|Win32
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Release|Win32.Build.0 = Release|Win32
+		{8E6FC051-7F89-4FFD-A8A9-A287ACE9157F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8E6FC051-7F89-4FFD-A8A9-A287ACE9157F}.Debug|Win32.Build.0 = Debug|Win32
+		{8E6FC051-7F89-4FFD-A8A9-A287ACE9157F}.Release|Win32.ActiveCfg = Release|Win32
+		{8E6FC051-7F89-4FFD-A8A9-A287ACE9157F}.Release|Win32.Build.0 = Release|Win32
+		{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}.Debug|Win32.Build.0 = Debug|Win32
+		{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}.Release|Win32.ActiveCfg = Release|Win32
+		{BA7678EE-2A4B-42BC-A7F6-CAEA97F62027}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
