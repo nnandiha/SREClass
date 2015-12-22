@@ -16,7 +16,30 @@ static const TCHAR DIFFICULTY[] = "5/5";
 This challenge
 */
 
-void __declspec (dllexport) NTAPI challenge2(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
+
+#define MEAN() 	{\
+	int r;\
+	__asm\
+	{\
+		__asm call jmp_target\
+		__asm jmp_target:\
+		__asm pop eax\
+		__asm add eax, 10\
+		__asm jmp eax\
+		__asm _emit 0xB9\
+		__asm _emit 0xAA\
+		__asm _emit 0xAA\
+		__asm _emit 0xAA\
+	}\
+	srand(time(NULL));\
+	r=rand()%3;\
+	if(r==0)\
+		throw(rand()%500);\
+	else if(r==1)\
+		throw(rand()/(r-1));\
+	}
+
+void NTAPI challenge2(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 {
 	TCHAR username[32];
 	SOCKET s = (SOCKET)context;
@@ -52,6 +75,14 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	TCHAR strSeed[16];
 	TCHAR username[32];
 	SOCKET s = (SOCKET)context;
+
+	try{
+		MEAN();
+	}
+	catch (...){
+		//do nothing
+		printf("Caught exception");
+	}
 
 	srand(time(NULL));
 
