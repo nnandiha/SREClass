@@ -35,7 +35,14 @@ static const int KEY_LENGTH = 32;
 static const TCHAR PYTHON_PATH[] = "C:\\Python27\\python.exe";
 static const TCHAR PYTHON_SCRIPT[] = "SubmitFlag.py";
 
-COMMON_API int startServer(_challengeInfo cInfo)
+DWORD WINAPI timeoutThread(LPVOID socket)
+{
+	Sleep(10000);
+	closesocket((SOCKET)socket);
+	return 0;
+}
+
+COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL timeout)
 {
 	WSADATA wsaData;
 	int iResult;
@@ -88,8 +95,14 @@ COMMON_API int startServer(_challengeInfo cInfo)
 
 	freeaddrinfo(result);
 
-	printf("Challenge ID:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
-	printf("Listening on port %s\n", cInfo.port);
+	if (suppressOutput == FALSE){
+		printf("Challenge ID:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
+		printf("Listening on port %s\n", cInfo.port);
+	}
+
+	if (timeout == TRUE){
+		CreateThread(NULL, 0, timeoutThread, (LPVOID)ListenSocket, 0, NULL);
+	}
 
 	while (1)
 	{
@@ -106,7 +119,7 @@ COMMON_API int startServer(_challengeInfo cInfo)
 		if (ClientSocket == INVALID_SOCKET) {
 			printf("accept failed with error: %d\n", WSAGetLastError());
 			closesocket(ListenSocket);
-			WSACleanup();
+			//WSACleanup();
 			return 1;
 		}
 
@@ -139,6 +152,11 @@ COMMON_API int startServer(_challengeInfo cInfo)
 	WSACleanup();
 
 	return 0;
+}
+
+COMMON_API int startServer(_challengeInfo cInfo)
+{
+	return startServerCore(cInfo, FALSE, 0);
 }
 
 COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend)

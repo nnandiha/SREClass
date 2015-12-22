@@ -30,6 +30,7 @@ static const int HMAC_LENGTH = 45; //Number of bytes needed to store our formatt
 
 //Communications functions
 COMMON_API int startServer(_challengeInfo cInfo);
+COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL timeout);
 COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend);
 COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet);
 COMMON_API void endComms(SOCKET s);
