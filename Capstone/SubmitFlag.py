@@ -9,7 +9,7 @@ from datetime import date
 
 if len(sys.argv) != 4:
 	print "Usage: %s <username> <Challenge ID> <difficulty>" % (sys.argv[0])
-	sys.exit(1)
+	sys.exit(2)
 	
 client = MongoClient('localhost', 27017)
 db = client.sre
@@ -19,9 +19,15 @@ challengeID = sys.argv[2]
 points = 100 * int(sys.argv[3])
 classID = 1
 
+#Truncate to 16 characters
+username = username[:16]
+
 #whitelist of allowed characters
-if username.strip('abcdefghijklmnopqrstuvwxyz01234567890-. '):
-	sys.exit(1)
+if username.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-. '):
+	sys.exit(3)
+if challengeID.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-. '):
+	sys.exit(4)
+
 
 query = {"username":username, "challengeID":challengeID, "classID":classID}
 flag = {"$set":{"username":username, "challengeID":challengeID, "classID":classID, "points":points, "timestamp":datetime.now()}}

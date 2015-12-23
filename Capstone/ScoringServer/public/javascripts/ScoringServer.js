@@ -54,13 +54,13 @@ app.factory('items', ['$http', function($http){
   };
   
   o.getScores = function(){
-    return $http.get('/scores/3').success(function(data){
+    return $http.get('/scores/100').success(function(data){
       angular.copy(data, o.scores);
     });
   };
   
   o.getFlags = function(){
-    return $http.get('/flags').success(function(data){
+    return $http.get('/flags/100').success(function(data){
       angular.copy(data, o.flags);
     });
   };
