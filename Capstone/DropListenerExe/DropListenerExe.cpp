@@ -25,7 +25,18 @@ static tEndComms pEndComms;
 static BYTE xorKey = 0x85;
 
 /*
-This challenge
+This challenge extracts another exe from its resource section and executes it, passing
+a random number on the command line. The child process takes this number and steps an
+internal LCG 243 times, then takes the final result and converts it into a high port
+number between 40000-65500. It exits with this port number as a return code. The parent
+process gets this return code and starts listening on that port. The student must
+connect to this port within 10 seconds to solve this challenge.
+
+LCG parameters: A=1103515245, C=12345, M=2^31
+
+Anti-SRE techniques used: Disassembly desynchronization, Random exceptions thrown,
+Loading dll functions by ordinal and calling via function pointers, important
+string munged with a static 1-byte xor key.
 */
 
 __forceinline void MEAN(){

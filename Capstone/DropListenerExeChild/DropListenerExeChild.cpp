@@ -6,7 +6,7 @@
 #include <Windows.h>
 
 /*
-Description goes here
+See DropListenerExe for description.
 */
 
 int _tmain(int argc, _TCHAR* argv[])
