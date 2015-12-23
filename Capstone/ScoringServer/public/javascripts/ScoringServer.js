@@ -10,6 +10,12 @@ app.config([
         url: '/home',
         templateUrl: '/home.html',
       });
+	
+	 $stateProvider
+      .state('challenges', {
+        url: '/challenges',
+        templateUrl: '/challenges.html',
+      });
 		
 		$stateProvider
 			.state('scores', {
