@@ -4,9 +4,11 @@ var mongoose = require('mongoose');
 
 var Score = mongoose.model('Score');
 
+var classID = 1;
+
 router.get('/:limit', function(req, res, next){
   var limit = Number(req.params.limit);
-  Score.find().sort([['points',-1], ['timestamp',1]]).limit(limit).exec(function(err, scores){
+  Score.find({'classID':classID}).sort([['points',-1], ['timestamp',1]]).limit(limit).exec(function(err, scores){
     if(err){
       return next(err);
     }

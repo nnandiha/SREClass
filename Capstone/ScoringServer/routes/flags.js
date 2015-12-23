@@ -4,8 +4,10 @@ var mongoose = require('mongoose');
 
 var Flag = mongoose.model('Flag');
 
+var classID = 1;
+
 router.get('/', function(req, res, next){
-  Flag.find().sort({timestamp:-1}).limit(3).exec(function(err, flags){
+  Flag.find({'classID':classID}).sort({timestamp:-1}).limit(3).exec(function(err, flags){
     if(err){
       return next(err);
     }
