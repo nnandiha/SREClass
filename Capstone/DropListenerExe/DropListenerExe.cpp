@@ -12,60 +12,82 @@ static const TCHAR DESCRIPTION[] = "Can you beat the clock?";
 static const TCHAR CATEGORY[] = "Anti-SRE";
 static const TCHAR DIFFICULTY[] = "5/5";
 
+typedef int(__stdcall *tSubmitFlag)(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty);
+typedef int(__stdcall *tGetData)(SOCKET s, TCHAR *buf, int bytesToGet);
+typedef int(__stdcall *tSendData)(SOCKET s, TCHAR *buf, int bytesToSend);
+typedef int(__stdcall *tEndComms)(SOCKET s);
+
+static tSubmitFlag pSubmitFlag;
+static tGetData pGetData;
+static tSendData pSendData;
+static tEndComms pEndComms;
+
+static BYTE xorKey = 0x85;
+
 /*
 This challenge
 */
 
-
-#define MEAN() 	{\
-	int r;\
-	__asm\
-	{\
-		__asm call jmp_target\
-		__asm jmp_target:\
-		__asm pop eax\
-		__asm add eax, 10\
-		__asm jmp eax\
-		__asm _emit 0xB9\
-		__asm _emit 0xAA\
-		__asm _emit 0xAA\
-		__asm _emit 0xAA\
-	}\
-	srand(time(NULL));\
-	r=rand()%3;\
-	if(r==0)\
-		throw(rand()%500);\
-	else if(r==1)\
-		throw(rand()/(r-1));\
+__forceinline void MEAN(){
+	int r = rand() % 3;
+	if (r == 0)
+		RaiseException(rand(), 0, NULL, NULL);
+	else if (r == 1)
+		RaiseException(5 / (r - 1), 0, NULL, NULL);
+	__asm {
+		xor eax, eax
+		_emit 0x74 //74 03 -> jz $+1
+		_emit 0x01
+		_emit 0xB9 //B9 XX XX XX XX -> mov ????
 	}
+}
+
+void xorWithKey(TCHAR *buf, DWORD len, BYTE key)
+{
+	for (int i = 0; i < len; i++)
+		buf[i] ^= key;
+}
 
 void NTAPI challenge2(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 {
 	TCHAR username[32];
 	SOCKET s = (SOCKET)context;
 
-	int usernameLen = getData(s, username, sizeof(username) - 1);
+	int usernameLen = pGetData(s, username, sizeof(username) - 1);
 	if (usernameLen <= 0){
-		endComms(s);
+		pEndComms(s);
 		return;
 	}
 	username[usernameLen - 1] = '\0'; //Clobber the \n that netcat adds
-	printf("User connected: %s\n", username);
 
-	int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY);
+	try{ MEAN(); }
+	catch (...){}
+	int result = pSubmitFlag(username, CHALLENGE_NAME, DIFFICULTY);
 	if (result == 0){
-		TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
-		sendData(s, chal2, sizeof(chal2));
+		try{ MEAN(); }
+		catch (...){}
+		//TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
+		TCHAR chal2[] = "\xc6\xea\xeb\xe2\xf7\xe4\xf1\xf0\xe9\xe4\xf1\xec\xea\xeb\xf6\xa4\xa5\xdc\xea\xf0\xf7\xa5\xe3\xe9\xe4\xe2\xa5\xed\xe4\xf6\xa5\xe7\xe0\xe0\xeb\xa5\xf6\xf0\xe7\xe8\xec\xf1\xf1\xe0\xe1\xab\n";
+		xorWithKey(chal2, sizeof(chal2) - 2, 0x85);
+		pSendData(s, chal2, sizeof(chal2));
 	}
 	else if (result == -2){
-		TCHAR chal2[] = "You have solved this challenge, but the flag submission script was not found. This probably means you were running it locally and not on the instructor's server.\n";
-		sendData(s, chal2, sizeof(chal2));
+		try{ MEAN(); }
+		catch (...){}
+		//TCHAR chal2[] = "You have solved this challenge, but the flag submission script was not found.\n";
+		TCHAR chal2[] = "\xdc\xea\xf0\xa5\xed\xe4\xf3\xe0\xa5\xf6\xea\xe9\xf3\xe0\xe1\xa5\xf1\xed\xec\xf6\xa5\xe6\xed\xe4\xe9\xe9\xe0\xeb\xe2\xe0\xa9\xa5\xe7\xf0\xf1\xa5\xf1\xed\xe0\xa5\xe3\xe9\xe4\xe2\xa5\xf6\xf0\xe7\xe8\xec\xf6\xf6\xec\xea\xeb\xa5\xf6\xe6\xf7\xec\xf5\xf1\xa5\xf2\xe4\xf6\xa5\xeb\xea\xf1\xa5\xe3\xea\xf0\xeb\xe1\xab\n";
+		xorWithKey(chal2, sizeof(chal2) - 2, 0x85);
+		pSendData(s, chal2, sizeof(chal2));
 	}
 	else{
-		TCHAR chal2[] = "You solved this challenge, but there was a problem submitting your flag. Try again or ask for assistance.\n";
-		sendData(s, chal2, sizeof(chal2));
+		try{ MEAN(); }
+		catch (...){}
+		//TCHAR chal2[] = "You solved this challenge, but there was a problem submitting your flag.\n";
+		TCHAR chal2[] = "\xdc\xea\xf0\xa5\xf6\xea\xe9\xf3\xe0\xe1\xa5\xf1\xed\xec\xf6\xa5\xe6\xed\xe4\xe9\xe9\xe0\xeb\xe2\xe0\xa9\xa5\xe7\xf0\xf1\xa5\xf1\xed\xe0\xf7\xe0\xa5\xf2\xe4\xf6\xa5\xe4\xa5\xf5\xf7\xea\xe7\xe9\xe0\xe8\xa5\xf6\xf0\xe7\xe8\xec\xf1\xf1\xec\xeb\xe2\xa5\xfc\xea\xf0\xf7\xa5\xe3\xe9\xe4\xe2\xab\n";
+		xorWithKey(chal2, sizeof(chal2) - 2, 0x85);
+		pSendData(s, chal2, sizeof(chal2));
 	}
-	endComms(s);
+	pEndComms(s);
 }
 
 void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
@@ -76,42 +98,51 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	TCHAR username[32];
 	SOCKET s = (SOCKET)context;
 
-	try{
-		MEAN();
-	}
-	catch (...){
-		//do nothing
-		printf("Caught exception");
-	}
-
 	srand(time(NULL));
+
+	try{ MEAN(); }
+	catch (...){}
 
 	unsigned int seed = (rand() % 25500) + 40000; //Get random number between 40000-65500
 	_snprintf_s(strSeed, 16, 16, "%d", seed);
 
 	//Drop child exe to disk
+	try{ MEAN(); }
+	catch (...){}
 	HRSRC hRsrc = FindResource(GetModuleHandle(NULL), "IDR_CHILD", RT_RCDATA);
 	if (hRsrc == NULL)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	HGLOBAL hExePtr = LoadResource(GetModuleHandle(NULL), hRsrc);
 	if (hExePtr == NULL)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	DWORD exeSize = SizeofResource(GetModuleHandle(NULL), hRsrc);
 	if (exeSize == 0)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	if (GetTempPath(MAX_PATH, tempPath) == 0)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	if (GetTempFileName(tempPath, "_da", 0, tempFilename) == 0)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	HANDLE hFile = CreateFile(tempFilename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 0, NULL);
 	if (hFile == NULL)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	DWORD bytesWritten;
 	if (WriteFile(hFile, hExePtr, exeSize, &bytesWritten, NULL) == FALSE)
 		return;
@@ -125,6 +156,8 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));
 
+	try{ MEAN(); }
+	catch (...){}
 	if (CreateProcess(tempFilename, strSeed, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi) == FALSE)
 		return;
 
@@ -133,6 +166,8 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 		return;
 	}
 
+	try{ MEAN(); }
+	catch (...){}
 	DeleteFile(tempFilename);
 
 	DWORD dwExitCode;
@@ -142,6 +177,8 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	if (dwExitCode < 40000 || dwExitCode >= 65500)
 		return;
 
+	try{ MEAN(); }
+	catch (...){}
 	TCHAR newPort[8];
 	int iResult = _stprintf_s(newPort, sizeof(newPort), "%d", dwExitCode);
 	if (iResult < 0)
@@ -164,21 +201,52 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 		return;
 	}
 
+	try{ MEAN(); }
+	catch (...){}
 	_challengeInfo cInfo;
 	cInfo.challengeName = CHALLENGE_NAME;
+	try{ MEAN(); }
+	catch (...){}
 	cInfo.port = newPort;
 	cInfo.description = "";
 	cInfo.category = "";
-	cInfo.difficulty = "";
+	cInfo.difficulty = "5/5";
+	try{ MEAN(); }
+	catch (...){}
 	cInfo.fCB = challenge2;
 
-	startServerCore(cInfo, TRUE, TRUE);
+	try{ MEAN(); }
+	catch (...){}
+	startServerCore(cInfo, FALSE, TRUE);
+
+	if (strlen(username) == 42){
+		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY);
+		if (result == 0){
+			TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
+			sendData(s, chal2, sizeof(chal2));
+		}
+		else if (result == -2){
+			TCHAR chal2[] = "You have solved this challenge, but the flag submission script was not found. This probably means you were running it locally and not on the instructor's server.\n";
+			sendData(s, chal2, sizeof(chal2));
+		}
+		else{
+			TCHAR chal2[] = "You solved this challenge, but there was a problem submitting your flag. Try again or ask for assistance.\n";
+			sendData(s, chal2, sizeof(chal2));
+		}
+	}
 
 	endComms(s);
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	HMODULE hDll = LoadLibrary("Common.dll");
+
+	pSubmitFlag = (tSubmitFlag)GetProcAddress(hDll, MAKEINTRESOURCE(8));
+	pGetData = (tGetData)GetProcAddress(hDll, MAKEINTRESOURCE(3));
+	pSendData = (tSendData)GetProcAddress(hDll, MAKEINTRESOURCE(5));
+	pEndComms = (tEndComms)GetProcAddress(hDll, MAKEINTRESOURCE(1));
+
 	_challengeInfo cInfo;
 	cInfo.challengeName = CHALLENGE_NAME;
 	cInfo.port = PORT;
