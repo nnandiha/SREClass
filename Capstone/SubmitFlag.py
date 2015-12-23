@@ -19,12 +19,10 @@ challengeID = sys.argv[2]
 points = 100 * int(sys.argv[3])
 classID = 1
 
-#Do some validation. Whitelist would be better...
-if '$' in username:
+#whitelist of allowed characters
+if username.strip('abcdefghijklmnopqrstuvwxyz01234567890-. '):
 	sys.exit(1)
-if '$' in challengeID:
-	sys.exit(1)
-  
+
 query = {"username":username, "challengeID":challengeID, "classID":classID}
 flag = {"$set":{"username":username, "challengeID":challengeID, "classID":classID, "points":points, "timestamp":datetime.now()}}
 flags = db.flags
