@@ -28,7 +28,7 @@ void NTAPI func(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK work)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	TCHAR oHash[64];
-	generateHMAC("test", 5, "test", 5, oHash, 20);
+//	generateHMAC("test", 5, "test", 5, oHash, 20);
 
 //	startServer("1234", "test", 5, func);
 	return 0;

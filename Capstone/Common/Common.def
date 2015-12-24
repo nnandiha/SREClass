@@ -1,0 +1,10 @@
+LIBRARY COMMON
+EXPORTS
+	startServer			@2
+	startServerCore		@4
+	sendData			@5
+	getData				@3
+	endComms			@1
+	getPseudoRand		@6
+	submitFlag			@8
+	validateUsername	@7

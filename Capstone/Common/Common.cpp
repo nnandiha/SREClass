@@ -217,6 +217,7 @@ COMMON_API int getPseudoRand()
 	return rand();
 }
 
+/*
 COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen)
 {
 	sha1nfo s;
@@ -303,7 +304,7 @@ COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR 
 		return 1;
 	else
 		return 0;
-}
+}*/
 
 COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty)
 {
@@ -351,4 +352,14 @@ COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, cons
 		printf("Error submitting flag.\n");
 		return -1;
 	}
+}
+
+COMMON_API BOOL validateUsername(const TCHAR *studentID, int studentIDLen)
+{
+	for (int i = 0; i < studentIDLen; i++){
+		if (!_istalnum(studentID[i]) && studentID[i] != _T('\0'))
+			return FALSE;
+	}
+
+	return TRUE;
 }

@@ -25,9 +25,6 @@ struct _challengeInfo{
 	PTP_WORK_CALLBACK fCB;
 };
 
-//"XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX\0"
-static const int HMAC_LENGTH = 45; //Number of bytes needed to store our formatted HMAC
-
 //Communications functions
 COMMON_API int startServer(_challengeInfo cInfo);
 COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL timeout);
@@ -37,8 +34,11 @@ COMMON_API void endComms(SOCKET s);
 
 //Math Functions
 COMMON_API int getPseudoRand();
-COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen);
-COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *hash, int hashLen);
+//COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen);
+//COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *hash, int hashLen);
 
 //Flag functions
 COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty);
+
+//Security Functions
+COMMON_API int validateUsername(const TCHAR *studentID, int studentIDLen);

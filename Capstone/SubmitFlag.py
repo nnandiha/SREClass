@@ -23,9 +23,9 @@ classID = 1
 username = username[:16]
 
 #whitelist of allowed characters
-if username.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-. '):
+if username.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890'):
 	sys.exit(3)
-if challengeID.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-. '):
+if challengeID.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890'):
 	sys.exit(4)
 
 

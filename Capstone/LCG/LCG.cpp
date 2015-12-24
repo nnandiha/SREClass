@@ -48,6 +48,11 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 		return;
 	}
 	username[usernameLen - 1] = '\0'; //Clobber the \n that netcat adds
+	if (validateUsername(username, usernameLen) == FALSE){
+		endComms(s);
+		return;
+	}
+
 	printf("User connected: %s\n", username);
 
 	int chal1Len = sprintf_s(chal1, sizeof(chal1), "Enter the number that follows %d in the sequence: ", match);

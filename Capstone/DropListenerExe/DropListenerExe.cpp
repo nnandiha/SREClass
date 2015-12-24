@@ -70,6 +70,10 @@ void NTAPI challenge2(PTP_CALLBACK_INSTANCE instance, PVOID context, PTP_WORK wo
 		return;
 	}
 	username[usernameLen - 1] = '\0'; //Clobber the \n that netcat adds
+	if (validateUsername(username, usernameLen) == FALSE){
+		pEndComms(s);
+		return;
+	}
 
 	try{ MEAN(); }
 	catch (...){}

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcxproj", "{913CF434-DAA6-4035-A90C-2BE0809CA424}"
 EndProject
@@ -41,11 +41,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StructMath", "StructMath\St
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XorGame", "XorGame\XorGame.vcxproj", "{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HMACVerifier", "HMACVerifier\HMACVerifier.vcxproj", "{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{913CF434-DAA6-4035-A90C-2BE0809CA424} = {913CF434-DAA6-4035-A90C-2BE0809CA424}
 	EndProjectSection
@@ -113,10 +108,6 @@ Global
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Debug|Win32.Build.0 = Debug|Win32
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.ActiveCfg = Release|Win32
 		{343CA1C1-E3DC-4B3D-AF96-4C6AAA5C888B}.Release|Win32.Build.0 = Release|Win32
-		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Debug|Win32.Build.0 = Debug|Win32
-		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.ActiveCfg = Release|Win32
-		{3DF89FD6-ADDE-4DFC-931E-F3E2DEA546F0}.Release|Win32.Build.0 = Release|Win32
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Debug|Win32.Build.0 = Debug|Win32
 		{C8CBA5A6-0E5D-4B57-937D-D553A4A26B07}.Release|Win32.ActiveCfg = Release|Win32
