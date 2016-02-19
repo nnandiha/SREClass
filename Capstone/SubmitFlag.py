@@ -17,7 +17,7 @@ db = client.sre
 username = sys.argv[1]
 challengeID = sys.argv[2]
 points = 100 * int(sys.argv[3])
-classID = 1
+classID = 2
 
 #Truncate to 16 characters
 username = username[:16]

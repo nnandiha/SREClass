@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 
 var Flag = mongoose.model('Flag');
 
-var classID = 1;
+var classID = 2;
 
 var allowedIPs = ['::ffff:127.0.0.1', '::ffff:10.54.32.149'];
 
