@@ -12,11 +12,12 @@ float floatToMatch = 423.72;
 
 int matchString(){
 	char buf[128];
+
+	printf("Please enter the correct string: ");
 	if (scanf("%64s", buf) != 1){
 		return -1;
 	}
 
-	printf("Please enter the correct string: ");
 	if (strncmp(stringToMatch, buf, sizeof(stringToMatch)) == 0){
 		return 0;
 	}
