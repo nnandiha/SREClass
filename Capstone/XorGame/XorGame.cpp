@@ -56,7 +56,7 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 
 	srand(time(NULL));
 	int num = rand();
-	int popcnt = _mm_popcnt_u32(num);
+	unsigned int popcnt = popcnt32(num);
 
 	int bufLen = sprintf_s(buf, sizeof(buf), "Your target is: %d\n", num);
 	if (sendData(s, buf, bufLen) < 0){
@@ -80,7 +80,7 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 		buf[bufLen - 1] = '\0'; //Clobber the \n that netcat adds
 
 		int xorVal = _tstoi(buf);
-		if (_mm_popcnt_u32(xorVal) != 1)
+		if (popcnt32(xorVal) != 1)
 		{
 			endComms(s);
 			return;

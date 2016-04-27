@@ -35,6 +35,7 @@ COMMON_API void endComms(SOCKET s);
 
 //Math Functions
 COMMON_API int getPseudoRand();
+COMMON_API unsigned int popcnt32(unsigned int v);
 //COMMON_API int generateHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, TCHAR *oHash, int oHashLen);
 //COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *hash, int hashLen);
 
