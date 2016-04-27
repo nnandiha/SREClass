@@ -30,6 +30,7 @@ COMMON_API int startServer(_challengeInfo cInfo);
 COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL timeout);
 COMMON_API int sendData(SOCKET s, TCHAR *buf, int bytesToSend);
 COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet);
+COMMON_API unsigned long getPeerIP(SOCKET s);
 COMMON_API void endComms(SOCKET s);
 
 //Math Functions
@@ -38,7 +39,7 @@ COMMON_API int getPseudoRand();
 //COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR *challengeID, int challengeIDLen, const TCHAR *hash, int hashLen);
 
 //Flag functions
-COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty);
+COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty, unsigned long peerIP);
 
 //Security Functions
 COMMON_API int validateUsername(const TCHAR *studentID, int studentIDLen);

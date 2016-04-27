@@ -36,6 +36,12 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	TCHAR buf[64];
 	SOCKET s = (SOCKET)context;
 
+	unsigned long peerIP = getPeerIP(s);
+	if (peerIP == 0){
+		endComms(s);
+		return;
+	}
+
 	int usernameLen = getData(s, username, sizeof(username) - 1);
 	if (usernameLen <= 0){
 		endComms(s);
@@ -84,7 +90,7 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	}
 
 	if (num == 0){
-		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY);
+		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY, peerIP);
 		if (result == 0){
 			TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
 			sendData(s, chal2, sizeof(chal2));

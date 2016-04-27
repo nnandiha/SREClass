@@ -7,8 +7,8 @@ import sys
 from datetime import datetime
 from datetime import date
 
-if len(sys.argv) != 4:
-	print "Usage: %s <username> <Challenge ID> <difficulty>" % (sys.argv[0])
+if len(sys.argv) != 5:
+	print "Usage: %s <username> <Challenge ID> <difficulty> <peerIP>" % (sys.argv[0])
 	sys.exit(2)
 	
 client = MongoClient('localhost', 27017)
@@ -17,7 +17,8 @@ db = client.sre
 username = sys.argv[1]
 challengeID = sys.argv[2]
 points = 100 * int(sys.argv[3])
-classID = 2
+peerIP = int(sys.argv[4])
+classID = 3
 
 #Truncate to 16 characters
 username = username[:16]
@@ -29,21 +30,27 @@ if challengeID.strip('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012345
 	sys.exit(4)
 
 
-query = {"username":username, "challengeID":challengeID, "classID":classID}
-flag = {"$set":{"username":username, "challengeID":challengeID, "classID":classID, "points":points, "timestamp":datetime.now()}}
+query = {"peerIP":peerIP, "challengeID":challengeID, "classID":classID}
+flag = {"$set":{"peerIP":peerIP, "username":username, "challengeID":challengeID, "classID":classID, "points":points, "timestamp":datetime.now()}}
 flags = db.flags
 result = flags.update_one(query, flag, upsert=True)
 
 if result.upserted_id:
 	scores = db.scores
-	score = scores.find_one({"username":username, "classID":classID})
-	print score
+	score = scores.find_one({"peerIP":peerIP, "classID":classID})
 	if score == None:
-		scores.insert_one({"username":username, "classID":classID, "points":points, "timestamp":datetime.now()})
+		scores.insert_one({"peerIP":peerIP, "username":username, "classID":classID, "points":points, "timestamp":datetime.now()})
 	else:
 		score["points"] = score["points"] + points
 		score["timestamp"] = datetime.now()
-		scores.update_one({"username":username, "classID":classID}, {"$set":score})
+		score["username"] = username
+		scores.update_one({"peerIP":peerIP, "classID":classID}, {"$set":score})
+else:
+	scores = db.scores
+	score = scores.find_one({"peerIP":peerIP, "classID":classID})
+	if score != None:
+		score["username"] = username
+		scores.update_one({"peerIP":peerIP, "classID":classID}, {"$set":score})
 	
 
 sys.exit(0)

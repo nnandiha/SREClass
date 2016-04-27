@@ -39,6 +39,13 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	TCHAR buf[32];
 	TCHAR chal1[128];
 	SOCKET s = (SOCKET)context;
+
+	unsigned long peerIP = getPeerIP(s);
+	if (peerIP == 0){
+		endComms(s);
+		return;
+	}
+
 	unsigned long long state = getPseudoRand();
 	int match = stepLCG(state);
 
@@ -73,7 +80,7 @@ void __declspec (dllexport) NTAPI challenge(PTP_CALLBACK_INSTANCE instance, PVOI
 	int guess = _tstoi(buf);
 
 	if (match == guess){
-		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY);
+		int result = submitFlag(username, CHALLENGE_NAME, DIFFICULTY, peerIP);
 		if (result == 0){
 			TCHAR chal2[] = "Congratulations! Your flag has been submitted.\n";
 			sendData(s, chal2, sizeof(chal2));

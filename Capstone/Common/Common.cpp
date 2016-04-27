@@ -206,6 +206,17 @@ COMMON_API int getData(SOCKET s, TCHAR *buf, int bytesToGet)
 	return iResult;
 }
 
+COMMON_API unsigned long getPeerIP(SOCKET s)
+{
+	SOCKADDR_IN peername;
+
+	int size = sizeof(SOCKADDR_IN);
+	if (getpeername(s, (SOCKADDR *)&peername, &size) != 0)
+		return 0;
+
+	return peername.sin_addr.S_un.S_addr;
+}
+
 COMMON_API void endComms(SOCKET s)
 {
 	closesocket(s);
@@ -306,7 +317,7 @@ COMMON_API int verifyHMAC(const TCHAR *studentID, int studentIDLen, const TCHAR 
 		return 0;
 }*/
 
-COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty)
+COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, const TCHAR *difficulty, unsigned long peerIP)
 {
 	CHAR cmdLine[MAX_PATH];
 	STARTUPINFO si;
@@ -320,7 +331,7 @@ COMMON_API int submitFlag(const TCHAR *studentID, const TCHAR *challengeID, cons
 	STARTUPINFO *lpStartupInfo = &si;
 	PROCESS_INFORMATION *lpProcessInformation = &pi;
 
-	_snprintf_s(cmdLine, MAX_PATH * sizeof(cmdLine[0]), MAX_PATH, "%s %s %s %s %c", PYTHON_PATH, PYTHON_SCRIPT, studentID, challengeID, difficulty[0]);
+	_snprintf_s(cmdLine, MAX_PATH * sizeof(cmdLine[0]), MAX_PATH, "%s %s %s %s %c %lu", PYTHON_PATH, PYTHON_SCRIPT, studentID, challengeID, difficulty[0], peerIP);
 
 	if (PathFileExists(PYTHON_SCRIPT) == FALSE)
 	{
