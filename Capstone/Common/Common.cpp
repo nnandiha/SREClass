@@ -34,6 +34,7 @@ static const TCHAR DEFAULT_KEY[] = "PASSWORD";
 static const int KEY_LENGTH = 32;
 static const TCHAR PYTHON_PATH[] = "C:\\Python27\\python.exe";
 static const TCHAR PYTHON_SCRIPT[] = "SubmitFlag.py";
+static const DWORD RATE_LIMIT_DELAY = 5000;
 
 DWORD WINAPI timeoutThread(LPVOID socket)
 {
@@ -46,6 +47,8 @@ COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL t
 {
 	WSADATA wsaData;
 	int iResult;
+	unsigned long lastPeer = 0;
+	DWORD lastTime = 0;
 
 	SOCKET ListenSocket = INVALID_SOCKET;
 	SOCKET ClientSocket = INVALID_SOCKET;
@@ -122,6 +125,18 @@ COMMON_API int startServerCore(_challengeInfo cInfo, BOOL suppressOutput, BOOL t
 			//WSACleanup();
 			return 1;
 		}
+
+		//Rate limit connections - only based on last client and time
+		unsigned long currentPeer = getPeerIP(ClientSocket);
+		if (currentPeer == lastPeer) {
+			DWORD currentTime = GetTickCount();
+			if (currentTime - lastTime < RATE_LIMIT_DELAY){
+				closesocket(ClientSocket);
+				continue;
+			}
+			lastTime = currentTime;
+		}
+		lastPeer = currentPeer;
 
 		TCHAR intro[512];
 		iResult = _stprintf_s(intro, sizeof(intro), "Challenge Name:\t%s\nDifficulty:\t%s\nCategory:\t%s\nDescription:\t%s\n\nPlease enter your student ID: ", cInfo.challengeName, cInfo.difficulty, cInfo.category, cInfo.description);
